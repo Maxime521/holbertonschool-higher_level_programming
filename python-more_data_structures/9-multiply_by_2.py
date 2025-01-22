@@ -4,4 +4,3 @@ def multiply_by_2(a_dictionary):
     for key in a_dictionary:
         a_new_dictinary[key] = a_dictionary[key] * 2
         return a_new_dictinary
-    
