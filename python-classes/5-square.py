@@ -38,7 +38,7 @@ class Square:
             int: the size of the square object
         """
         return self.__size
-    
+
     @size.setter
     def size(self, value):
         """
@@ -65,7 +65,7 @@ class Square:
             int: the area of the square
         """
         return self.__size ** 2
-    
+
     def my_print(self):
         """
         Prints the square using the character #
