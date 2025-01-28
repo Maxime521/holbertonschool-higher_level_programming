@@ -1,7 +1,7 @@
 #!/usr/bin/python3
-"""Square generation module for Python project"""
+"""Rectangle generation module for Python project"""
 
 
 class Rectangle:
-    """class defined for square generation"""
+    """class defined for rectangle generation"""
     pass
