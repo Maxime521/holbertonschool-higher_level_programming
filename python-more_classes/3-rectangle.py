@@ -7,6 +7,7 @@ class Rectangle:
     class Rectangle that defines a rectangle.
     Properties: width and height.
     Area and Perimeter methods.
+    Print and str methods.
     """
     def __init__(self, width=0, height=0):
         self.width = width
@@ -43,3 +44,12 @@ class Rectangle:
         if self.__width == 0 or self.__height == 0:
             return 0
         return (self.__width * 2) + (self.__height * 2)
+
+    def __str__(self):
+        if self.__width == 0 or self.__height == 0:
+            return ""
+        rect = ""
+        for i in range(self.__height):
+            rect += "#" * self.__width
+            rect += "\n" if i != self.__height - 1 else ""
+        return rect
