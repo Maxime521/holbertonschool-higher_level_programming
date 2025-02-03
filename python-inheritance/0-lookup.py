@@ -1,3 +1,3 @@
 #!/usr/bin/python3
 def lookup(obj):
-    return obj.__lookup
+    return dir(obj)
