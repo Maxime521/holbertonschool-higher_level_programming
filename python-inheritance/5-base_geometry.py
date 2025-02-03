@@ -5,7 +5,7 @@ This module definies an emply class BaseGeometry
 
 
 class BaseGeometry:
-    """ Defines a class called BaseGeometry
-        Used to indicate that the class is currently empty
+    """
+    Write an empty class BaseGeometry
     """
     pass
