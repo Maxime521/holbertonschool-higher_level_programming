@@ -2,3 +2,8 @@
 Test cases for my_list function
 """
 
+>>> my_list = MyList([3, 1, 2])
+>>> my_list.print_sorted()
+[1, 2, 3]
+>>> my_list
+[3, 1, 2]
