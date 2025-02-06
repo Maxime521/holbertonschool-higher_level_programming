@@ -4,16 +4,36 @@ Test cases for my_list function
 
 >>> MyList = __import__('1-my_list').MyList
 
+# Adding positive to positive
+>>> my_list = MyList()
+>>> my_list.append(1)
+>>> my_list.append(2)
+>>> my_list.append(3)
+>>> my_list.print_sorted()
+[1, 2, 3]
 
-# Adding multiple numbers
+# Test regular case with positive integers
 >>> my_list = MyList()
 >>> my_list.append(1)
 >>> my_list.append(4)
->>> my_list.append(3)
 >>> my_list.append(2)
+>>> my_list.append(3)
+>>> my_list.append(5)
+>>> print(my_list)
+[1, 4, 2, 3, 5]
 >>> my_list.print_sorted()
-[1, 2, 3, 4]
+[1, 2, 3, 4, 5]
+>>> print(my_list)
+[1, 4, 2, 3, 5]
+
+>>> my_list = MyList([1, 4], [3, 2])
+Traceback (most recent call last):
+    ...
+TypeError: list expected at most 1 argument, got 2
 
 Testing __doc__:
 >>> print(MyList.__doc__)
-MyList class
+<BLANKLINE>
+    The class MyList, which inherits from the list, includes a method
+    that prints the list sorted in ascending order.
+<BLANKLINE>
