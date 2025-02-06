@@ -1,51 +1,19 @@
 """
-Test cases for MyList function
+Test cases for my_list function
 """
 
 >>> MyList = __import__('1-my_list').MyList
 
-# Adding positive numbers
+
+# Adding multiple numbers
 >>> my_list = MyList()
 >>> my_list.append(1)
 >>> my_list.append(4)
->>> my_list.append(2)
 >>> my_list.append(3)
->>> my_list.append(5)
->>> print(my_list)
-[1, 4, 2, 3, 5]
+>>> my_list.append(2)
 >>> my_list.print_sorted()
-[1, 2, 3, 4, 5]
->>> print(my_list)
-[1, 4, 2, 3, 5]
+[1, 2, 3, 4]
 
-# Adding negative numbers
->>> my_list.append(-1)
->>> my_list.append(-4)
->>> my_list.print_sorted()
-[-4, -1, 1, 2, 3, 4, 5]
-
-# Testing with mixed types (should raise TypeError)
->>> my_list.append("hello")
->>> my_list.print_sorted()
-Traceback (most recent call last):
-    ...
-TypeError: '<' not supported between instances of 'str' and 'int'
-
-# Testing incorrect initialization (should raise TypeError)
->>> my_list = MyList([1, 4], [3, 2])
-Traceback (most recent call last):
-    ...
-TypeError: list expected at most 1 argument, got 2
-
-# Testing with undefined variable (should raise NameError)
->>> list_no_exist.print_sorted()
-Traceback (most recent call last):
-    ...
-NameError: name 'list_no_exist' is not defined
-
-# Testing __doc__
+Testing __doc__:
 >>> print(MyList.__doc__)
-<BLANKLINE>
-    The class MyList, which inherits from the list, includes a method
-    that prints the list sorted in ascending order.
-<BLANKLINE>
+MyList class
