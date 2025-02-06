@@ -1,16 +1,10 @@
-"""
-Test cases for my_list function
-"""
+# tests/1-my_list.txt
+
+=======================
+How to use MyList class
+=======================
 
 >>> MyList = __import__('1-my_list').MyList
-
-# Adding positive to positive
->>> my_list = MyList()
->>> my_list.append(1)
->>> my_list.append(2)
->>> my_list.append(3)
->>> my_list.print_sorted()
-[1, 2, 3]
 
 # Test regular case with positive integers
 >>> my_list = MyList()
@@ -26,14 +20,38 @@ Test cases for my_list function
 >>> print(my_list)
 [1, 4, 2, 3, 5]
 
->>> my_list = MyList([1, 4], [3, 2])
-Traceback (most recent call last):
-    ...
-TypeError: list expected at most 1 argument, got 2
+# Test empty list
+>>> empty_list = MyList()
+>>> empty_list.print_sorted()
+[]
 
-Testing __doc__:
->>> print(MyList.__doc__)
-<BLANKLINE>
-    The class MyList, which inherits from the list, includes a method
-    that prints the list sorted in ascending order.
-<BLANKLINE>
+# Test list with negative numbers
+>>> neg_list = MyList()
+>>> neg_list.append(-1)
+>>> neg_list.append(-4)
+>>> neg_list.append(-2)
+>>> neg_list.append(-3)
+>>> neg_list.print_sorted()
+[-4, -3, -2, -1]
+
+# Test list with one element
+>>> single = MyList()
+>>> single.append(100)
+>>> single.print_sorted()
+[100]
+
+# Test list with repeated elements
+>>> repeat = MyList()
+>>> repeat.append(1)
+>>> repeat.append(1)
+>>> repeat.append(2)
+>>> repeat.append(2)
+>>> repeat.print_sorted()
+[1, 1, 2, 2]
+
+# Test that the original list is not modified
+>>> my_list = MyList([3, 2, 1])
+>>> my_list.print_sorted()
+[1, 2, 3]
+>>> print(my_list)
+[3, 2, 1]
