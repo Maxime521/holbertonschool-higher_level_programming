@@ -1,87 +1,100 @@
-#!/usr/bin/env python3
-"""
-A Flask-based REST API for managing user data.
-Implements all CRUD operations with proper error handling and response formats.
-"""
-
+#!/usr/bin/python3
+"""API Security and Authentication Techniques"""
 from flask import Flask, jsonify, request
-from http import HTTPStatus
+from flask_httpauth import HTTPBasicAuth
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_jwt_extended import JWTManager, create_access_token
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
-# Initialize Flask application
+
 app = Flask(__name__)
+auth = HTTPBasicAuth()
+app.config['JWT_SECRET_KEY'] = 'secret_key'
+jwt = JWTManager(app)
 
-# In-memory storage for users
+
 users = {
-    "jane": {
-        "username": "jane",
-        "name": "Jane",
-        "age": 28,
-        "city": "Los Angeles"
-    },
-    "john": {
-        "username": "john",
-        "name": "John",
-        "age": 30,
-        "city": "New York"
-    }
-}
-
-
-@app.route("/")
-def home():
-    """Root endpoint returning welcome message."""
-    return "Welcome to the Flask API!"
-
-
-@app.route("/data")
-def get_data():
-    """Return list of all usernames."""
-    return jsonify(list(users.keys()))
-
-
-@app.route("/status")
-def get_status():
-    """Return API status."""
-    return "OK"
-
-
-@app.route("/users/<username>")
-def get_user(username):
-    """Return user details for given username."""
-    if username in users:
-        return jsonify(users[username])
-    return jsonify({"error": "User not found"}), HTTPStatus.NOT_FOUND
-
-
-@app.route("/add_user", methods=["POST"])
-def add_user():
-    """Add a new user to the system."""
-    data = request.get_json()
-
-    # Check if username is provided
-    if not data or "username" not in data:
-        return jsonify({
-            "error": "Username is required"
-        }), HTTPStatus.BAD_REQUEST
-
-    # Create new user entry
-    username = data["username"]
-    new_user = {
-        "username": username,
-        "name": data.get("name"),
-        "age": data.get("age"),
-        "city": data.get("city")
+    "user1": {
+        "username": "user1",
+        "password": generate_password_hash("password"),
+        "role": "user"
+        },
+    "admin1": {
+        "username": "admin1",
+        "password": generate_password_hash("password"),
+        "role": "admin"
+        }
     }
 
-    # Add to users dictionary
-    users[username] = new_user
 
-    # Return success response
-    return jsonify({
-        "message": "User added",
-        "user": new_user
-    }), HTTPStatus.CREATED
+@auth.verify_password
+def verify_password(username, password):
+    User = users.get(username)
+    if User and check_password_hash(User["password"], password):
+        return username
+    return None
+
+
+@app.route("/basic-protected", methods=['GET'])
+@auth.login_required
+def basic_protected():
+    return "Basic Auth: Access Granted"
+
+
+@app.route("/login", methods=['POST'])
+def login():
+    username = request.json.get("username", None)
+    password = request.json.get("password", None)
+    if not username or not password:
+        return jsonify({"message": "username and password required"}), 400
+
+    logged_user = users.get(username)
+    if logged_user and check_password_hash(logged_user["password"], password):
+        access_token = create_access_token(identity=username)
+        return jsonify(access_token=access_token), 200
+    return jsonify({"message": "Invalid username or password"}), 401
+
+
+@app.route("/jwt-protected", methods=['GET'])
+@jwt_required()
+def jwt_protected():
+    return "JWT Auth: Access Granted"
+
+
+@app.route("/admin-only", methods=['GET'])
+@jwt_required()
+def admin_access():
+    logged_user = get_jwt_identity()
+    user = users.get(logged_user)
+    if user["role"] == "admin":
+        return "Admin Access: Granted"
+    return jsonify({"error": "Admin access required"}), 403
+
+
+@jwt.unauthorized_loader
+def handle_unauthorized_error(err):
+    return jsonify({"error": "Missing or invalid token"}), 401
+
+
+@jwt.invalid_token_loader
+def handle_invalid_token_error(err):
+    return jsonify({"error": "Invalid token"}), 401
+
+
+@jwt.expired_token_loader
+def handle_expired_token_error(err):
+    return jsonify({"error": "Token has expired"}), 401
+
+
+@jwt.revoked_token_loader
+def handle_revoked_token_error(err):
+    return jsonify({"error": "Token has been revoked"}), 401
+
+
+@jwt.needs_fresh_token_loader
+def handle_needs_fresh_token_error(err):
+    return jsonify({"error": "Fresh token required"}), 401
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host="127.0.0.1", port=5000)
+    app.run()
